@@ -11,6 +11,7 @@ import (
 )
 
 var invalids []int
+var second_part = true
 
 func sumWithForLoop(numbers []int) int {
     sum := 0
@@ -69,39 +70,40 @@ func read_file(filename string) {
 		for i := start; i < end; i++ {
 			digits := splitToDigits(i)//[j:len(end)])
 			if len(digits) < 2 { continue }
-			if len(digits) % 2 == 1 { continue }
-
-			if reflect.DeepEqual(digits[0:len(digits)/2], digits[len(digits)/2:len(digits)]) {
-				fmt.Println("Found invalid number: ", i)
-				invalids = append(invalids, i)
+			if !second_part {
+				if reflect.DeepEqual(digits[0:len(digits)/2], digits[len(digits)/2:len(digits)]) {
+					fmt.Println("Found invalid number: ", i)
+					invalids = append(invalids, i)
+				}
+				continue
 			}
 
-			//for j := 1 ; j < count + 1; j++ {
-			//	var digit_groups [][]int
-			//	for z := 0; z < len(digits); z += j {
-			//		endIdx := z + j
-			//		if endIdx > len(digits) {
-			//			endIdx = len(digits)
-			//		}
-			//		// Append the chunk to our groups
-			//		digit_groups = append(digit_groups, digits[z:endIdx])
-			//	}
-			//	dummy := true
-			//	for l := 0; l < len(digit_groups)-1; l++ {
-			//		if !reflect.DeepEqual(digit_groups[l], digit_groups[l+1]) {
-			//			//fmt.Println("found equal", digit_groups[l], "and", digit_groups[l+1])
+			for j := 1 ; j < len(digits)/2 + 1; j++ {
+				var digit_groups [][]int
+				for z := 0; z < len(digits); z += j {
+					endIdx := z + j
+					if endIdx > len(digits) {
+						endIdx = len(digits)
+					}
+					// Append the chunk to our groups
+					digit_groups = append(digit_groups, digits[z:endIdx])
+				}
+				dummy := true
+				for l := 0; l < len(digit_groups)-1; l++ {
+					if !reflect.DeepEqual(digit_groups[l], digit_groups[l+1]) {
+						//fmt.Println("found equal", digit_groups[l], "and", digit_groups[l+1])
 
-			//			dummy = false
-			//		}
-			//	}
-			//	if dummy == true {
-			//		fmt.Println("Found invalid number: ", i)
-			//		invalids = append(invalids, i)
-			//		break
-			//	}
-			//	//fmt.Printf("Number: %d | Split Size: %d | Result: %v\n", i, j, digit_groups)
-			//	
-			//}
+						dummy = false
+					}
+				}
+				if dummy == true {
+					fmt.Println("Found invalid number: ", i)
+					invalids = append(invalids, i)
+					break
+				}
+				//fmt.Printf("Number: %d | Split Size: %d | Result: %v\n", i, j, digit_groups)
+				
+			}
 		}
 	}
 }
